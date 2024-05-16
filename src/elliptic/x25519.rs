@@ -55,3 +55,34 @@ pub fn pk_to_vec(pk: &PublicKey, _compressed: bool) -> Vec<u8> {
 fn get_shared_secret(sender_point: &[u8], shared_point: &[u8]) -> SharedSecret {
     hkdf_derive(sender_point, shared_point)
 }
+
+#[cfg(test)]
+mod lib_tests {
+    use super::{generate_keypair, Error};
+    use crate::{decrypt, encrypt};
+
+    const MSG: &str = "helloworld🌍";
+    const BIG_MSG_SIZE: usize = 2 * 1024 * 1024; // 2 MB
+    const BIG_MSG: [u8; BIG_MSG_SIZE] = [1u8; BIG_MSG_SIZE];
+
+    fn test_enc_dec(sk: &[u8], pk: &[u8]) {
+        let msg = MSG.as_bytes();
+        assert_eq!(msg.to_vec(), decrypt(sk, &encrypt(pk, msg).unwrap()).unwrap());
+        let msg = &BIG_MSG;
+        assert_eq!(msg.to_vec(), decrypt(sk, &encrypt(pk, msg).unwrap()).unwrap());
+    }
+
+    #[test]
+    pub fn test_compressed_public() {
+        let (sk, pk) = generate_keypair();
+        let (sk, pk) = (sk.as_bytes(), pk.as_bytes());
+        test_enc_dec(sk, pk);
+    }
+
+    #[test]
+    pub fn test_uncompressed_public() {
+        let (sk, pk) = generate_keypair();
+        let (sk, pk) = (sk.as_bytes(), pk.as_bytes());
+        test_enc_dec(sk, pk);
+    }
+}

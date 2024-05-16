@@ -1,5 +1,5 @@
 {
-  "rust-analyzer.cargo.features": ["pure"],
+  "rust-analyzer.cargo.features": ["pure", "secp256k1"],
   "rust-analyzer.cargo.noDefaultFeatures": true,
   "rust-analyzer.procMacro.enable": true,
   "rust-analyzer.linkedProjects": ["./Cargo.toml"]

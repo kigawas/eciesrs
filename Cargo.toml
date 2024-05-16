@@ -24,8 +24,8 @@ hkdf = {version = "0.12.4", default-features = false}
 sha2 = {version = "0.10.8", default-features = false}
 
 # elliptic curves
-libsecp256k1 = {version = "0.7.1", default-features = false, features = ["static-context"]}
-# x25519-dalek = {version = "2.0.0", default-features = false, features = ["static_secrets"], optional = true}
+libsecp256k1 = {version = "0.7.1", default-features = false, features = ["static-context"], optional = true}
+x25519-dalek = {version = "2.0.0", default-features = false, features = ["static_secrets"], optional = true}
 
 # openssl aes
 openssl = {version = "0.10.64", default-features = false, optional = true}
@@ -42,7 +42,7 @@ getrandom = {version = "0.2.12", default-features = false}
 rand_core = {version = "0.6.4", default-features = false, features = ["getrandom"]}
 
 # configuration
-once_cell = {version = "1.19.0", default-features = false}
+once_cell = {version = "1.19.0", default-features = false, features = ["critical-section"]}
 parking_lot = "0.12.1"
 
 [target.'cfg(all(target_arch = "wasm32", target_os="unknown"))'.dependencies]
@@ -60,8 +60,8 @@ default = ["openssl"]
 std = ["hkdf/std", "sha2/std", "once_cell/std", "libsecp256k1/std"]
 
 # curve
-# secp256k1 = ["libsecp256k1"]
-# x25519 = ["x25519-dalek"]
+secp256k1 = ["libsecp256k1"]
+x25519 = ["x25519-dalek"]
 
 # cipher
 aes-12bytes-nonce = [] # with feature "openssl" or "pure". default: 16 bytes
